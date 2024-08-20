@@ -41,3 +41,5 @@ target_include_directories(test
 PRIVATE
         cppdraw
         )
+
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)

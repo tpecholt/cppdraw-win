@@ -141,7 +141,7 @@ float timeDelta();
 
 DateTime dateTime();
 
-bool mouseDown();
+bool mouseDown(int button = 0);
 
 vec2 mousePos();
 
