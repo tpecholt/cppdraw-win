@@ -39,14 +39,14 @@ void line(float x1, float y1, float x2, float y2)
     ImGui::GetWindowDrawList()->AddLine({ x1, y1 }, { x2, y2 }, color_, thickness_);
 }
 
-void rect(float x1, float y1, float w, float h)
+void rect(float x1, float y1, float x2, float y2)
 {
-    ImGui::GetWindowDrawList()->AddRect({ x1, y1 }, { x1+w, y1+w }, color_, 0, 0, thickness_);
+    ImGui::GetWindowDrawList()->AddRect({ x1, y1 }, { x2, y2 }, color_, 0, 0, thickness_);
 }
 
-void fillRect(float x1, float y1, float w, float h)
+void fillRect(float x1, float y1, float x2, float y2)
 {
-    ImGui::GetWindowDrawList()->AddRectFilled({ x1, y1 }, { x1+w, y1+w }, color_);
+    ImGui::GetWindowDrawList()->AddRectFilled({ x1, y1 }, { x2, y2 }, color_);
 }
 
 void circle(float x1, float y1, float r)

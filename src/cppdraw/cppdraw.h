@@ -71,7 +71,7 @@ struct LineShape {
     float thick;
 };
 struct RectShape {
-    float x1, y1, w, h;
+    float x1, y1, x2, y2;
     clr color;
     float thick;
 };
