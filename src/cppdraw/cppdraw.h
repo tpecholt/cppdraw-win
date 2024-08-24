@@ -1,10 +1,7 @@
 #pragma once
-//#include <string_view> //todo: provide lightweight version to speed up compile time
 #include <stddef.h>
 #include <cstring>
 #include <cmath>
-
-const int CPPDRAW_PORT = 5551;
 
 struct ZStringView {
     ZStringView()
@@ -54,57 +51,6 @@ struct DateTime {
     int day, month, year;
 };
 
-struct DrawCmd {
-    vec2 screenSize;
-    int mouseDown;
-    vec2 mousePos;
-    vec2 mouseDelta;
-    float time;
-    float timeDelta;
-    DateTime dateTime;
-    bool keys[64];
-};
-
-struct LineShape {
-    float x1, y1, x2, y2;
-    clr color;
-    float thick;
-};
-struct RectShape {
-    float x1, y1, x2, y2;
-    clr color;
-    float thick;
-};
-struct CircleShape {
-    float x1, y1, r;
-    clr color;
-    float thick;
-};
-struct TriangleShape {
-    float x1, y1, x2, y2, x3, y3;
-    clr color;
-};
-struct TextShape {
-    float x1, y1;
-    size_t text;
-    size_t font;
-    float size;
-    clr color;
-};
-
-struct Shape {
-    enum Kind { Line, Rect, FillRect, FillTriangle, Circle, FillCircle, Text };
-    Kind kind;
-    union {
-        LineShape l;
-        RectShape r;
-        CircleShape c;
-        TriangleShape t;
-        TextShape x;
-    };
-    Shape(Kind k);
-};
-
 clr RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a=255);
 
 //rendering
@@ -117,13 +63,15 @@ void thickness(float th);
 
 void line(float x1, float y1, float x2, float y2);
 
-void rectangle(float x1, float y1, float w, float h);
+void rectangle(float x1, float y1, float x2, float y2);
 
 void circle(float x1, float y1, float r);
 
 void text(float x, float y, ZStringView text);
 
-void fillRect(float x1, float y1, float w, float h);
+vec2 textExtents(ZStringView text);
+
+void fillRect(float x1, float y1, float x2, float y2);
 
 void fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3);
 
@@ -132,6 +80,8 @@ void fillQuad(float x1, float y1, float x2, float y2, float x3, float y3, float 
 void fillCircle(float x1, float y1, float r);
 
 vec2 screenSize();
+
+void screenSize(float w, float h);
 
 //user interaction
 

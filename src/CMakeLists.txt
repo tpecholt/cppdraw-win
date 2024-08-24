@@ -43,3 +43,9 @@ PRIVATE
         )
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/misc/fonts/DroidSans.ttf
+    ${CMAKE_CURRENT_BINARY_DIR}
+    COPYONLY
+)

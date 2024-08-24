@@ -5,6 +5,11 @@
 ImU32 color_;
 float thickness_;
 float fontSize_;
+float lastTime_;
+float time_;
+vec2 lastMousePos_;
+vec2 mousePos_;
+vec2 screenSize_;
 
 void newFrame()
 {
@@ -12,7 +17,14 @@ void newFrame()
     thickness_ = 1.f;
     //fontName_ = "";
     fontSize_ = 18;
+    lastTime_ = time_;
+    time_ = (float)ImGui::GetTime();
+    lastMousePos_ = mousePos_;
+    mousePos_ = { ImGui::GetMousePos().x, ImGui::GetMousePos().y };
+    screenSize_ = { ImGui::GetMainViewport()->Size.x, ImGui::GetMainViewport()->Size.y };
 }
+
+//----------------------------------------------------------
 
 clr RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
@@ -39,7 +51,7 @@ void line(float x1, float y1, float x2, float y2)
     ImGui::GetWindowDrawList()->AddLine({ x1, y1 }, { x2, y2 }, color_, thickness_);
 }
 
-void rect(float x1, float y1, float x2, float y2)
+void rectangle(float x1, float y1, float x2, float y2)
 {
     ImGui::GetWindowDrawList()->AddRect({ x1, y1 }, { x2, y2 }, color_, 0, 0, thickness_);
 }
@@ -64,19 +76,42 @@ void fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3)
     ImGui::GetWindowDrawList()->AddTriangleFilled({ x1, y1 }, { x2, y2 }, { x3, y3 }, color_);
 }
 
+void fillQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
+{
+    fillTriangle(x1, y1, x2, y2, x3, y3);
+    fillTriangle(x3, y3, x4, y4, x1, y1);
+}
+
 void text(float x, float y, ZStringView str)
 {
     ImGui::GetWindowDrawList()->AddText(nullptr, fontSize_, { x, y }, color_, str.c_str());
 }
 
+vec2 textExtents(ZStringView str)
+{
+    auto sz = ImGui::CalcTextSize(str.c_str());
+    float scale = fontSize_ / ImGui::GetFontSize();
+    return { scale * sz.x, scale * sz.y };
+}
+
 vec2 screenSize()
 {
-    return { ImGui::GetMainViewport()->Size.x, ImGui::GetMainViewport()->Size.y };
+    return screenSize_;
+}
+
+void screenSize(float w, float h)
+{
+    screenSize_ = { w, h };
 }
 
 float time()
 {
-    return (float)ImGui::GetTime();
+    return time_;
+}
+
+float timeDelta()
+{
+    return time_ - lastTime_;
 }
 
 DateTime dateTime()
@@ -93,7 +128,12 @@ bool mouseDown(int button)
 
 vec2 mousePos()
 {
-    return { ImGui::GetMousePos().x, ImGui::GetMousePos().y };
+    return mousePos_;
+}
+
+vec2 mouseDelta()
+{
+    return mousePos_ - lastMousePos_;
 }
 
 bool keyDown(int key)

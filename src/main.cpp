@@ -33,6 +33,7 @@ void Draw()
 		}
 		newFrame();
 		draw();
+		glfwSetWindowSize(window, screenSize().x, screenSize().y);
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();
@@ -102,9 +103,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	// Read 'docs/FONTS.md' for more instructions and details.
 	ImGui::StyleColorsDark();
 
+	//load big font (it will be downscaled)
+	io.Fonts->AddFontFromFileTTF("DroidSans.ttf", 48.f);
 	/*
-	io.Fonts->AddFontFromFileTTF("Roboto-Medium.ttf", 20.0f * ioUserData.dpiScale);
-
 	ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
 	ImFontConfig icons_config;
 	icons_config.MergeMode = true;
