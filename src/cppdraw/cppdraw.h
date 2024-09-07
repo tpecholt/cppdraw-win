@@ -1,7 +1,6 @@
 #pragma once
 #include <stddef.h>
 #include <cstring>
-#include <cmath>
 
 struct ZStringView {
     ZStringView()
@@ -24,7 +23,7 @@ private:
     size_t size_;
 };
 
-using clr = unsigned;
+using ucolor = unsigned;
 
 struct vec2 {
     float x, y;
@@ -42,7 +41,7 @@ struct vec2 {
     vec2& operator*= (float f) { *this = *this * f; return *this; }
     vec2& operator/= (float f) { *this = *this / f; return *this; }
     friend float dot(vec2 a, vec2 b) { return a.x * b.x + a.y * b.y; }
-    friend float norm(vec2 a) { return std::sqrt(dot(a, a)); }
+    //friend float norm(vec2 a) { return std::sqrt(dot(a, a)); }
     friend float cross(vec2 a, vec2 b) { return a.x*b.y - a.y*b.x; }
 };
 
@@ -51,11 +50,11 @@ struct DateTime {
     int day, month, year;
 };
 
-clr RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a=255);
+ucolor RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a=255);
 
 //rendering
 
-void color(clr c);
+void color(ucolor c);
 
 void font(ZStringView name, float fontSize);
 
@@ -73,6 +72,8 @@ vec2 textExtents(ZStringView text);
 
 void fillRect(float x1, float y1, float x2, float y2);
 
+void fillRectWH(float x1, float y1, float w, float h);
+
 void fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3);
 
 void fillQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
@@ -81,7 +82,9 @@ void fillCircle(float x1, float y1, float r);
 
 vec2 screenSize();
 
-void screenSize(float w, float h);
+void screenSize(ZStringView title, float w, float h);
+
+ZStringView title();
 
 //user interaction
 
@@ -97,7 +100,9 @@ vec2 mousePos();
 
 vec2 mouseDelta();
 
-bool keyDown(int key);
+bool keyPressed(int key); //like ImGuiKey_A | ImGuiMod_Ctrl
+
+void playSound(ZStringView path);
 
 //
 

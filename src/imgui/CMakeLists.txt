@@ -15,6 +15,7 @@ add_library(imgui STATIC
 target_link_libraries(imgui
         ${OPENGL_LIBRARIES}
         ${GLFW_LIBRARIES}
+        winmm.lib
         )
 
 target_include_directories(imgui

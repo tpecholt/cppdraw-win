@@ -1,6 +1,11 @@
 #include "cppdraw.h"
 #include <imgui.h>
 #include <ctime>
+#include <string>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <mmsystem.h>
+#undef RGB
 
 ImU32 color_;
 float thickness_;
@@ -10,28 +15,33 @@ float time_;
 vec2 lastMousePos_;
 vec2 mousePos_;
 vec2 screenSize_;
+std::string title_;
 
 void newFrame()
 {
     color_ = 0xffffffff;
     thickness_ = 1.f;
     //fontName_ = "";
+    title_ = "cppdraw";
     fontSize_ = 18;
     lastTime_ = time_;
     time_ = (float)ImGui::GetTime();
     lastMousePos_ = mousePos_;
     mousePos_ = { ImGui::GetMousePos().x, ImGui::GetMousePos().y };
-    screenSize_ = { ImGui::GetMainViewport()->Size.x, ImGui::GetMainViewport()->Size.y };
+    if (!screenSize_.x || !screenSize_.y)
+        screenSize_ = { 800, 600 };
+    else
+        screenSize_ = { ImGui::GetMainViewport()->Size.x, ImGui::GetMainViewport()->Size.y };
 }
 
 //----------------------------------------------------------
 
-clr RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+ucolor RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
     return (a << 24) | (b << 16) | (g << 8) | r;
 }
 
-void color(clr c)
+void color(ucolor c)
 {
     color_ = c;
 }
@@ -59,6 +69,11 @@ void rectangle(float x1, float y1, float x2, float y2)
 void fillRect(float x1, float y1, float x2, float y2)
 {
     ImGui::GetWindowDrawList()->AddRectFilled({ x1, y1 }, { x2, y2 }, color_);
+}
+
+void fillRectWH(float x1, float y1, float w, float h)
+{
+    fillRect(x1, y1, x1 + w, y1 + h);
 }
 
 void circle(float x1, float y1, float r)
@@ -99,9 +114,15 @@ vec2 screenSize()
     return screenSize_;
 }
 
-void screenSize(float w, float h)
+void screenSize(ZStringView title, float w, float h)
 {
+    title_.assign(title.c_str(), title.size());
     screenSize_ = { w, h };
+}
+
+ZStringView title()
+{
+    return title_;
 }
 
 float time()
@@ -136,7 +157,15 @@ vec2 mouseDelta()
     return mousePos_ - lastMousePos_;
 }
 
-bool keyDown(int key)
+bool keyPressed(int key)
 {
-    return ImGui::IsKeyDown(ImGuiKey(key));
+    int mod = key & ImGuiMod_Mask_;
+    if (!ImGui::IsKeyPressed(ImGuiKey(key & (~ImGuiMod_Mask_))))
+        return false;
+    return ImGui::GetIO().KeyMods == mod;
+}
+
+void playSound(ZStringView path)
+{
+    PlaySoundA(path.c_str(), NULL, SND_FILENAME | SND_ASYNC);
 }

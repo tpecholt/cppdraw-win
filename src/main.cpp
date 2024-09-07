@@ -17,7 +17,7 @@ GLFWwindow* window;
 void Draw()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
-	glfwSetWindowTitle(window, "test");
+	glfwSetWindowTitle(window, title().c_str());
 	ImGui::SetNextWindowPos({ 0, 0 });
 	int tmpWidth, tmpHeight;
 	glfwGetWindowSize(window, &tmpWidth, &tmpHeight);
@@ -25,15 +25,15 @@ void Draw()
 	bool tmpOpen;
 	if (ImGui::Begin("###test", &tmpOpen, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
 	{
-		if (ImGui::IsWindowAppearing())
+		/*if (ImGui::IsWindowAppearing())
 		{
 			glfwSetWindowSize(window, 800, 600);
 			glfwSetWindowAttrib(window, GLFW_RESIZABLE, true);
 			glfwSetWindowAttrib(window, GLFW_DECORATED, true);
-		}
+		}*/
 		newFrame();
 		draw();
-		glfwSetWindowSize(window, screenSize().x, screenSize().y);
+		glfwSetWindowSize(window, (int)screenSize().x, (int)screenSize().y);
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();
